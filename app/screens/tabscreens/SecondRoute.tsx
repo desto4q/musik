@@ -1,25 +1,57 @@
 import {
-  Button,
-  StyleSheet,
+  Dimensions,
+  LayoutAnimation,
   Text,
-  Touchable,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import TrackPlayer, {
-  usePlaybackState,
-  useProgress,
-  State,
-} from 'react-native-track-player';
-import {tw} from '../../utils/utils';
+import TrackPlayer, {useActiveTrack} from 'react-native-track-player';
+import {
+  convertContentUriToFileUri,
+  generatePalette,
+  tw,
+} from '../../utils/utils';
 import CustomTrack from '../../components/CustomTrack';
-import {usePlayerContext} from '../../Context/PlayerContext';
-
+// import {
+//   getPalette,
+//   getAverageColor,
+//   getSegmentsAverageColor,
+//   getSegmentsPalette,
+// } from '@somesoap/react-native-image-palette';
+import {useSheet} from '../../Context/SheetContext';
+import RNColorThief from 'react-native-color-thief';
+let height = Dimensions.get('window').height;
+let configure = async () => {
+  LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+};
 export default function SecondRoute() {
-  const playerState = usePlaybackState();
+  let track = useActiveTrack();
+  let {bottomSheetRef, colorObj, setObj} = useSheet();
+
+  let gen = async () => {
+    if (track?.artwork) {
+      try {
+        let content_uri = track.artwork;
+        let pals = await generatePalette(content_uri);
+        // console.log(pals);
+        let newObj = {
+          ...colorObj,
+          background: pals[0],
+          text: pals[1],
+        };
+        setObj(newObj);
+        return;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
   useEffect(() => {
-    console.log(playerState.state);
+    gen();
+  }, [track]);
+  useEffect(() => {
+    console.log('height', height - 140);
   }, []);
   return (
     <View style={tw('flex-1')}>
@@ -40,7 +72,9 @@ export default function SecondRoute() {
         }}>
         <Text>Play</Text>
       </TouchableOpacity>
+
       <CustomTrack />
+      <Text>{track?.artist}</Text>
     </View>
   );
 }

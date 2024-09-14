@@ -1,21 +1,27 @@
-import TrackPlayer, {usePlaybackState} from 'react-native-track-player';
+import TrackPlayer from 'react-native-track-player';
 
-let addToPlayer = async (item: any) => {
-  await TrackPlayer.add({
-    id: item.id,
-    url: item.audioUrl,
-    title: item.title,
-    artist: item.artist,
-    album: item.album,
-    artwork: item.imageUrl,
-    duration: item.duration / 1000, // Duration in seconds
-  });
+let PlayTrack = async (item: any) => {
+  try {
+    // Load the track
+    const loadPromise = TrackPlayer.load({
+      id: item.id,
+      url: item.audioUrl,
+      title: item.title,
+      artist: item.artist,
+      album: item.album,
+      artwork: item.imageUrl,
+      duration: item.duration, // Duration in seconds
+    });
 
-  // Optionally, you can set the newly added song as the current one and start playing
-  const queue = await TrackPlayer.getQueue();
-  const currentTrack = queue.length - 1; // Get the index of the last added track
-  await TrackPlayer.skip(currentTrack); // Set this track as the active one
-  await TrackPlayer.play(); // Start playing the track
+    // Play the track once it is loaded
+    loadPromise
+      .then(() => TrackPlayer.play())
+      .catch(error => {
+        console.error('Error playing track:', error);
+      });
+  } catch (err) {
+    console.error('Error loading track:', err);
+  }
 };
 
-export {addToPlayer};
+export {PlayTrack};

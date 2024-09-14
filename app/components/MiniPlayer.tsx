@@ -1,4 +1,11 @@
-import {View, Text, Image, Touchable, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Touchable,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
 import React, {useEffect} from 'react';
 import {tw} from '../utils/utils';
 import TrackPlayer, {
@@ -8,26 +15,57 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {Circle, G, Svg} from 'react-native-svg';
 import {IconPlayerPause, IconPlayerPlay} from '@tabler/icons-react-native';
+import {useSheet} from '../Context/SheetContext';
 
 export default function MiniPlayer() {
   let track = useActiveTrack();
   let {duration, position} = useProgress();
+  let {bottomSheetRef, colorObj} = useSheet();
+
   useEffect(() => {
     console.log(track);
   }, []);
+  let openModal = () => {
+    bottomSheetRef.current?.expand();
+  };
   return (
     <View style={tw('h-22 items-center flex-row px-4 py-2 gap-4')}>
-      <Image
-        style={tw('h-12 w-12 bg-red-200 rounded-md')}
-        source={{uri: track?.artwork}}></Image>
-      <View>
-        <Text style={tw('text-lg')}>{track?.title}</Text>
-        <Text>{track?.artist}</Text>
-      </View>
+      <TouchableOpacity
+        style={tw('flex-row gap-4 flex-1')}
+        onPress={() => {
+          // modalizeRef.current?.open('top');
+          openModal();
+        }}>
+        {track?.artwork ? (
+          <Image
+            style={tw('h-12 w-12 rounded-md')}
+            source={{uri: track?.artwork}}></Image>
+        ) : (
+          <View style={tw('h-12 w-12  rounded-md')}></View>
+        )}
+        <View>
+          <Text
+            numberOfLines={1}
+            style={[
+              tw('text-lg'),
+              {
+                color: colorObj.text,
+              },
+            ]}>
+            {track?.title}
+          </Text>
+          <Text
+            style={{
+              color: colorObj.text,
+            }}>
+            {track?.artist}
+          </Text>
+        </View>
+      </TouchableOpacity>
       <View style={tw('ml-auto')}>
         <CircularProgress
           progress={position}
-          max={duration }
+          max={duration}
           size={36}
           strokeWidth={2}
         />
@@ -52,62 +90,30 @@ function CircularProgress({
   max = 100,
 }: CircularProgressProps) {
   // Ensure progress is between min and max
-  const clampedProgress = Math.max(min, Math.min(progress, max));
 
-  // Map progress to a percentage (0 to 100)
-  const normalizedProgress = ((clampedProgress - min) / (max - min)) * 100;
-
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset =
-    circumference - (circumference * normalizedProgress) / 100;
   const playerState = usePlaybackState();
 
   let pauseOrPlay = async () => {
+    console.log('cl');
     if (playerState.state == 'playing') {
       return await TrackPlayer.pause();
     }
     return await TrackPlayer.play();
   };
+  let {colorObj} = useSheet();
   return (
     <View style={tw('items-center justify-center')}>
-      <Svg width={size} height={size}>
-        <G rotation="-90" origin={`${size / 2}, ${size / 2}`}>
-          {/* Background Circle */}
-          <Circle
-            stroke="#e6e7e8"
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            strokeWidth={strokeWidth}
-            fill="none"
-          />
-          {/* Progress Circle */}
-          <Circle
-            stroke="#3b5998"
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            strokeWidth={strokeWidth}
-            fill="none"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round" // Optional, gives rounded edges
-          />
-        </G>
-      </Svg>
-      <View style={tw('absolute p-2 ')}>
-        <TouchableOpacity
-          onPress={async () => {
-            await pauseOrPlay();
-          }}>
-          {playerState.state == 'paused' ? (
-            <IconPlayerPlay size={22} color={'white'} />
-          ) : (
-            <IconPlayerPause size={22} color={'white'} />
-          )}
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={tw('p-2')}
+        onPress={async () => {
+          await pauseOrPlay();
+        }}>
+        {playerState.state == 'paused' ? (
+          <IconPlayerPlay size={22} color={colorObj.text ?? 'white'} />
+        ) : (
+          <IconPlayerPause size={22} color={colorObj.text ?? 'white'} />
+        )}
+      </TouchableOpacity>
     </View>
   );
 }

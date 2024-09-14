@@ -1,46 +1,44 @@
 import {
   createContext,
+  Dispatch,
   ReactNode,
   RefObject,
-  useCallback,
+  SetStateAction,
   useContext,
   useEffect,
   useRef,
+  useState,
 } from 'react';
-import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
-import {StyleSheet, Text} from 'react-native';
+import {Animated, StyleSheet, Text} from 'react-native';
 import {usePlaybackState} from 'react-native-track-player';
+import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
+import {colors} from '../utils/utils';
 
+type TcolObj = {
+  background: string;
+  text: string;
+};
 interface ISheetProps {
   bottomSheetRef: RefObject<BottomSheet>;
-  handleSheetChanges: (index: number) => any;
+  colorObj: TcolObj;
+  setObj: Dispatch<SetStateAction<TcolObj>>;
 }
 
-let SheetContext = createContext<ISheetProps>();
+let SheetContext = createContext<ISheetProps | undefined>(undefined); // Initialize as undefined to catch errors
+let tmp = {
+  background: colors.neutral[900], // Fallback in case colors.neutral is undefined
+  text: colors.neutral[400], // Fallback in case colors.neutral is undefined
+};
 let SheetProvider = ({children}: {children: ReactNode}) => {
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const playerState = usePlaybackState();
-  const updateSheet = async () => {
-    if (playerState.state == undefined) {
-      console.log(playerState);
-      return;
-    }
-    if (playerState.state === 'paused' || playerState.state === 'playing') {
-      return;
-    } else {
-      await bottomSheetRef.current?.snapToIndex(0);
-    }
-  };
-  useEffect(() => {
-    updateSheet();
-  }, [playerState]);
+  let [colorObj, setObj] = useState<TcolObj>(tmp);
 
-  useEffect(() => {}, []);
-  let values = {bottomSheetRef, handleSheetChanges};
+  useEffect(() => {
+    setObj(tmp);
+  }, [tmp]); // Add colorObj as a dependency to track changes
+
+  let values = {bottomSheetRef, colorObj, setObj};
 
   return (
     <SheetContext.Provider value={values}>{children}</SheetContext.Provider>
@@ -49,6 +47,9 @@ let SheetProvider = ({children}: {children: ReactNode}) => {
 
 let useSheet = () => {
   let context = useContext(SheetContext);
+  if (!context) {
+    throw new Error('useSheet must be used within a SheetProvider');
+  }
   return context;
 };
 

@@ -1,21 +1,8 @@
-import {
-  Children,
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import TrackPlayer, {
-  Event,
-  usePlaybackState,
-  useProgress,
-  useTrackPlayerEvents,
-} from 'react-native-track-player';
-
+import {createContext, ReactNode, useContext, useEffect} from 'react';
+import TrackPlayer, {Event, useProgress} from 'react-native-track-player';
 
 let PlayerContext = createContext<any>(undefined);
-const events = [Event.PlaybackState, Event.PlaybackError];
+// const events = [Event.PlaybackState, Event.PlaybackError];
 let setUp = async () => {
   await TrackPlayer.setupPlayer();
 };
@@ -24,8 +11,8 @@ let PlayerContextProvider = ({children}: {children: ReactNode}) => {
     setUp();
   }, []);
 
-  let progress = useProgress();
-  let values = {progress};
+  // let progress = useProgress();
+  let values = {};
   return (
     <PlayerContext.Provider value={values}>{children}</PlayerContext.Provider>
   );

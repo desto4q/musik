@@ -1,9 +1,9 @@
 import {View, Text, FlatList} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {tw} from '../../utils/utils';
 import {fetchAudioFiles} from '@gauch_99/react-native-audio-files';
 import SongCard from '../../components/SongCard';
-
+import {FlashList} from '@shopify/flash-list';
 export default function SongScreen() {
   let [files, setFiles] = useState<any[]>([]);
 
@@ -16,21 +16,20 @@ export default function SongScreen() {
   useEffect(() => {
     getFiles();
   }, []);
-
   return (
-    <View style={[tw('flex-1 px-2')]}>
-      <FlatList
+    <View style={[tw('flex-1  px-2')]}>
+     
+      <FlashList
         data={files}
-        contentContainerStyle={tw('gap-2')}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({item}) => {
-          
+        // removeClippedSubviews
+        estimatedItemSize={250}
+        renderItem={({item, index}) => {
           return (
             <SongCard
               item={item}
+              imageUrl={item.imageUrl}
               artist={item.artist}
               title={item.title}
-              imageUrl={item.imageUrl}
             />
           );
         }}
