@@ -1,29 +1,28 @@
-import {View, Text, FlatList} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import {View, StatusBar, Touchable, TouchableOpacity, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {tw} from '../../utils/utils';
 import {fetchAudioFiles} from '@gauch_99/react-native-audio-files';
 import SongCard from '../../components/SongCard';
 import {FlashList} from '@shopify/flash-list';
+import {useMusicContext} from '../../Context/MusicContext';
+
 export default function SongScreen() {
-  let [files, setFiles] = useState<any[]>([]);
+  let {musicList} = useMusicContext();
 
-  let getFiles = async () => {
-    const audioFiles = await fetchAudioFiles();
-    setFiles(audioFiles);
-    return audioFiles;
-  };
-
-  useEffect(() => {
-    getFiles();
-  }, []);
   return (
-    <View style={[tw('flex-1  px-2')]}>
-     
+    <View style={[tw('flex-1')]}>
+      <TouchableOpacity
+        style={[tw('p-2')]}
+        onPress={() => {
+          console.log(musicList[0]);
+        }}>
+        <Text>click me</Text>
+      </TouchableOpacity>
+      {/* <StatusBar translucent backgroundColor="transparent" /> */}
       <FlashList
-        data={files}
-        // removeClippedSubviews
-        estimatedItemSize={250}
-        renderItem={({item, index}) => {
+        data={musicList}
+        estimatedItemSize={52}
+        renderItem={({item}) => {
           return (
             <SongCard
               item={item}

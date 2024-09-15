@@ -10,7 +10,8 @@ export default function StackNav() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        statusBarColor: themeObj.background,
+        statusBarTranslucent: true,
+        statusBarColor: 'transparent',
       }}>
       <Stack.Screen name="mainScreen" component={TabNav} />
     </Stack.Navigator>

@@ -17,6 +17,7 @@ import {colors} from '../utils/utils';
 type TcolObj = {
   background: string;
   text: string;
+  third: string;
 };
 interface ISheetProps {
   bottomSheetRef: RefObject<BottomSheet>;
@@ -27,7 +28,8 @@ interface ISheetProps {
 let SheetContext = createContext<ISheetProps | undefined>(undefined); // Initialize as undefined to catch errors
 let tmp = {
   background: colors.neutral[900], // Fallback in case colors.neutral is undefined
-  text: colors.neutral[400], // Fallback in case colors.neutral is undefined
+  text: colors.neutral[400],
+  third: colors.neutral[600], // Fallback in case colors.neutral is undefined
 };
 let SheetProvider = ({children}: {children: ReactNode}) => {
   const bottomSheetRef = useRef<BottomSheet>(null);

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {colors, tw} from '../utils/utils';
 import {NavigationState, SceneRendererProps} from 'react-native-tab-view';
-import {IconAlbum, IconMusic} from '@tabler/icons-react-native';
+import {IconAlbum, IconMoodEmpty, IconMusic} from '@tabler/icons-react-native';
 interface Route {
   key: string;
   title: string;
@@ -27,6 +27,9 @@ const ICONS = [
   ),
   (color?: string) => (
     <IconAlbum size={ICON_SIZE} color={color || ICON_COLOR} />
+  ),
+  (color?: string) => (
+    <IconMoodEmpty size={ICON_SIZE} color={color || ICON_COLOR} />
   ),
 ];
 let CTBNav = (props: CTB) => {

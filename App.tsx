@@ -5,6 +5,7 @@ import TrackPlayer from 'react-native-track-player';
 import {PlayerContextProvider} from './app/Context/PlayerContext';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SheetProvider} from './app/Context/SheetContext';
+import {MusicContextProvider} from './app/Context/MusicContext';
 
 if (Platform.OS === 'android') {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -15,11 +16,13 @@ if (Platform.OS === 'android') {
 export default function App() {
   return (
     <GestureHandlerRootView>
-      <PlayerContextProvider>
-        <SheetProvider>
-          <Main />
-        </SheetProvider>
-      </PlayerContextProvider>
+      <MusicContextProvider>
+        <PlayerContextProvider>
+          <SheetProvider>
+            <Main />
+          </SheetProvider>
+        </PlayerContextProvider>
+      </MusicContextProvider>
     </GestureHandlerRootView>
   );
 }

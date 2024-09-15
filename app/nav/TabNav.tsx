@@ -14,17 +14,20 @@ import MiniPlayer from '../components/MiniPlayer';
 import MainPlayer from '../components/MainPlayer';
 import {tw} from '../utils/utils';
 import {useSheet} from '../Context/SheetContext';
+import AlbumScreen from '../screens/tabscreens/AlbumScreen';
 
 let width = Dimensions.get('window').width;
 
 const renderScene = SceneMap({
   first: SongScreen,
-  second: SecondRoute,
+  second: AlbumScreen,
+  third: SecondRoute,
 });
 
 const routes = [
   {key: 'first', title: 'Song'},
   {key: 'second', title: 'Album'},
+  {key: 'third', title: 'Test'},
 ];
 
 export default function TabNav() {
@@ -73,6 +76,8 @@ export default function TabNav() {
 
       {/* BottomSheet */}
       <BottomSheet
+        activeOffsetY={[-1, 1]}
+        failOffsetX={[-5, 5]}
         ref={bottomSheetRef}
         handleComponent={null}
         backgroundStyle={[

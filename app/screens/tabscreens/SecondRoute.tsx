@@ -13,14 +13,8 @@ import {
   tw,
 } from '../../utils/utils';
 import CustomTrack from '../../components/CustomTrack';
-// import {
-//   getPalette,
-//   getAverageColor,
-//   getSegmentsAverageColor,
-//   getSegmentsPalette,
-// } from '@somesoap/react-native-image-palette';
+
 import {useSheet} from '../../Context/SheetContext';
-import RNColorThief from 'react-native-color-thief';
 let height = Dimensions.get('window').height;
 let configure = async () => {
   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -39,6 +33,7 @@ export default function SecondRoute() {
           ...colorObj,
           background: pals[0],
           text: pals[1],
+          third: pals[2],
         };
         setObj(newObj);
         return;
@@ -51,7 +46,7 @@ export default function SecondRoute() {
     gen();
   }, [track]);
   useEffect(() => {
-    console.log('height', height - 140);
+    // console.log('height', height - 140);
   }, []);
   return (
     <View style={tw('flex-1')}>
