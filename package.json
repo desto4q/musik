@@ -25,6 +25,8 @@
     "@somesoap/react-native-image-palette": "^1.0.3",
     "@tabler/icons-react-native": "^3.16.0",
     "easycolors": "^2.0.0",
+    "expo": "^51.0.0",
+    "expo-music-library": "^1.1.7",
     "fast-fuzzy": "^1.12.0",
     "moti": "^0.29.0",
     "react": "18.3.1",

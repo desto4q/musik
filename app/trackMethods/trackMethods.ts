@@ -24,4 +24,19 @@ let PlayTrack = async (item: any) => {
   }
 };
 
+let PlayNext = async (item: any) => {
+  try {
+    const loadPromise = await TrackPlayer.load({
+      id: item.id,
+      url: item.audioUrl,
+      title: item.title,
+      artist: item.artist,
+      album: item.album,
+      artwork: item.imageUrl,
+      duration: item.duration, // Duration in seconds
+    });
+    TrackPlayer.play
+  } catch (err) {}
+};
+
 export {PlayTrack};

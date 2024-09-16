@@ -16,6 +16,7 @@ let windowHeight = Dimensions.get('window').height;
 let windowWidth = Dimensions.get('window').width;
 import LinearGradient from 'react-native-linear-gradient';
 import MainPlayerControls from './MainPlayerControls';
+import {useNavigation} from '@react-navigation/native';
 function convertRgbToRgba(rgb: string, opacity: number) {
   // Extract the RGB values using a regular expression
   const result = rgb.match(/\d+/g);
@@ -31,8 +32,14 @@ function convertRgbToRgba(rgb: string, opacity: number) {
 }
 export default function MainPlayer() {
   let track = useActiveTrack();
+
   let {duration, position} = useProgress();
-  let {colorObj} = useSheet();
+  let {colorObj, bottomSheetRef} = useSheet();
+  let navigation = useNavigation();
+  let onPress = () => {
+    bottomSheetRef.current?.snapToIndex(0);
+    navigation.navigate('lyricScreen');
+  };
   return (
     <View
       style={[
@@ -83,15 +90,14 @@ export default function MainPlayer() {
           <CustomTrack />
         </View>
         <MainPlayerControls />
+        <TouchableOpacity
+          style={tw('p-2')}
+          onPress={() => {
+            onPress();
+          }}>
+          <Text>lsa</Text>
+        </TouchableOpacity>
       </LinearGradient>
-
-      <TouchableOpacity
-        style={tw('p-2')}
-        onPress={() => {
-          console.log('click');
-        }}>
-        <Text>lsa</Text>
-      </TouchableOpacity>
     </View>
   );
 }

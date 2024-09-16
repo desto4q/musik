@@ -11,62 +11,53 @@ import Animated, {
 } from 'react-native-reanimated';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {FasterImageView, clearCache} from '@candlefinance/faster-image';
+import {useMusicContext} from '../Context/MusicContext';
 
 type TSongCard = {
   imageUrl: string;
   title: string;
   artist: string;
   item: any;
+  index: number;
 };
 
-function SongCard({imageUrl, title, artist, item}: TSongCard) {
-  // Shared value for scale animation
-  const scale = useSharedValue(1);
-
-  // Animated style for scaling
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{scale: scale.value}],
-    };
-  });
-
-  // Function to handle press and play track
+function SongCard({imageUrl, title, artist, item, index}: TSongCard) {
+  let {currentPlayingId, setCurrentPlaying} = useMusicContext();
+  let {musicList} = useMusicContext();
   const playNext = useCallback(async () => {
-    scale.value = withSpring(0.95, {damping: 2, stiffness: 100}, () => {
-      scale.value = withSpring(1);
-    });
     try {
-      await PlayTrack(item).then(async res => {});
+      await PlayTrack(musicList[index]);
+      setCurrentPlaying(index);
     } catch (err) {}
-  }, [item, scale]);
+  }, [item]);
 
   return (
-    <Pressable onPress={playNext}>
-      <Animated.View style={[animatedStyle]}>
-        <View style={tw('flex-row w-full p-2 items-center gap-4')}>
-          <FasterImageView
-            source={{url: imageUrl, borderRadius: 8}}
-            style={{
-              height: 48,
-              width: 48,
-            }}
-          />
-          <View>
-            <Text style={tw('text-lg text-neutral-200')}>{title}</Text>
-            <Text style={tw('text-neutral-400')}>{artist}</Text>
-          </View>
+    <TouchableOpacity onPress={playNext}>
+      <View style={tw('flex-row w-full p-2 items-center gap-4')}>
+        <FasterImageView
+          source={{url: imageUrl, borderRadius: 8}}
+          style={{
+            height: 48,
+            width: 48,
+          }}
+        />
+        <View>
+          <Text style={tw('text-lg text-neutral-200')}>{title}</Text>
+          <Text style={tw('text-neutral-400')}>{artist}</Text>
         </View>
-      </Animated.View>
-    </Pressable>
+      </View>
+    </TouchableOpacity>
   );
 }
 
 // Wrap SongCard in React.memo to prevent unnecessary re-renders
-export default React.memo(SongCard, (prevProps, nextProps) => {
-  return (
-    prevProps.imageUrl === nextProps.imageUrl &&
-    prevProps.title === nextProps.title &&
-    prevProps.artist === nextProps.artist &&
-    prevProps.item === nextProps.item
-  );
-});
+// export default React.memo(SongCard, (prevProps, nextProps) => {
+//   return (
+//     prevProps.imageUrl === nextProps.imageUrl &&
+//     prevProps.title === nextProps.title &&
+//     prevProps.artist === nextProps.artist &&
+//     prevProps.item === nextProps.item
+//   );
+// });
+
+export default SongCard;

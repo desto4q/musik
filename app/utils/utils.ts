@@ -44,4 +44,30 @@ let generatePalette = async (url: string) => {
   }
   return col_arr;
 };
-export {tw, themeObj, colors, convertContentUriToFileUri, generatePalette};
+function parseLRC(lrc: string) {
+  const lines = lrc.split('\n');
+  const result: any = [];
+  const timeExp = /\[(\d{2}):(\d{2})\.(\d{2})\]/;
+  lines.forEach(line => {
+    const match = timeExp.exec(line);
+    if (match) {
+      const min = parseInt(match[1], 10);
+      const sec = parseInt(match[2], 10);
+      const millisec = parseInt(match[3], 10);
+      const time = min * 60 + sec + millisec / 100;
+
+      const lyricText = line.replace(timeExp, '').trim();
+      result.push({time, text: lyricText});
+    }
+  });
+
+  return result;
+}
+export {
+  tw,
+  themeObj,
+  colors,
+  convertContentUriToFileUri,
+  generatePalette,
+  parseLRC,
+};

@@ -6,15 +6,14 @@ import {IconPlayerPause, IconPlayerPlay} from '@tabler/icons-react-native';
 
 let PlayButton = ({size}: {size?: number}) => {
   const playerState = usePlaybackState();
+  let {colorObj} = useSheet();
 
   let pauseOrPlay = async () => {
-    console.log('cl');
     if (playerState.state == 'playing') {
       return await TrackPlayer.pause();
     }
     return await TrackPlayer.play();
   };
-  let {colorObj} = useSheet();
   return (
     <View style={tw('items-center justify-center')}>
       <TouchableOpacity
@@ -22,10 +21,10 @@ let PlayButton = ({size}: {size?: number}) => {
         onPress={async () => {
           await pauseOrPlay();
         }}>
-        {playerState.state == 'paused' ? (
-          <IconPlayerPlay size={size || 22} color={colorObj.text ?? 'white'} />
-        ) : (
+        {playerState.state == 'playing' ? (
           <IconPlayerPause size={size || 22} color={colorObj.text ?? 'white'} />
+        ) : (
+          <IconPlayerPlay size={size || 22} color={colorObj.text ?? 'white'} />
         )}
       </TouchableOpacity>
     </View>

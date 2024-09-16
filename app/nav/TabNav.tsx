@@ -33,8 +33,6 @@ export default function TabNav() {
     // console.log('background, nav', colorObj.background);
   }, []);
 
- 
-
   return (
     <View style={{flex: 1}}>
       <TabView
@@ -48,7 +46,7 @@ export default function TabNav() {
       />
 
       {/* BottomSheet */}
-      
+
       {/* Animated View controlled by animVal */}
       {/* MiniPlayer view */}
     </View>

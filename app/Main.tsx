@@ -6,7 +6,6 @@ import {colors, themeObj} from './utils/utils';
 import StackNav from './nav/StackNav';
 import {useSheet} from './Context/SheetContext';
 import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
-
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -27,6 +26,7 @@ export default function Main() {
   };
   const animVal = useSharedValue(0);
 
+  // Animated style for MiniPlayer
   const miniPlayerStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(animVal.value, [0, 1], [1, 0]), // Fade out mini player
@@ -49,17 +49,18 @@ export default function Main() {
       ],
     };
   });
+
   return (
-    <>
-      <NavigationContainer theme={myTheme}>
-        <StackNav />
-      </NavigationContainer>
+    <NavigationContainer theme={myTheme}>
+      <StackNav />
       <BottomSheet
-      detached
-        activeOffsetY={[-1, 1]}
-        failOffsetX={[-5, 5]}
+        activeOffsetY={[-10, 10]}
+        failOffsetX={[-10, 10]}
         ref={bottomSheetRef}
         handleComponent={null}
+        style={{
+          zIndex: 1, // Ensure zIndex is lower than StackNav
+        }}
         backgroundStyle={[
           {
             backgroundColor: colorObj.background,
@@ -76,7 +77,6 @@ export default function Main() {
             ]}>
             <MiniPlayer />
           </Animated.View>
-
           {/* MainPlayer view */}
           <Animated.View
             style={[
@@ -93,6 +93,6 @@ export default function Main() {
           {/* Any content inside the animated view */}
         </BottomSheetView>
       </BottomSheet>
-    </>
+    </NavigationContainer>
   );
 }

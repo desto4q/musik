@@ -1,7 +1,10 @@
-import {fetchAudioFiles} from '@gauch_99/react-native-audio-files';
+import ds, {fetchAudioFiles} from '@gauch_99/react-native-audio-files';
+import {getAlbumsAsync, getGenresAsync} from 'expo-music-library';
 import React, {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useContext,
   useEffect,
   useState,
@@ -10,6 +13,8 @@ import React, {
 interface IMusicContext {
   musicList: any[];
   albumList: any[];
+  currentPlayingId: number;
+  setCurrentPlaying: Dispatch<SetStateAction<number>>;
 }
 interface IMusicProvider {
   children: ReactNode;
@@ -19,8 +24,12 @@ let MusicContext = createContext<IMusicContext | undefined>(undefined);
 
 let MusicContextProvider = ({children}: IMusicProvider) => {
   let [musicList, setMusicList] = useState<any>([]);
-  let [albumList, setAlbumList] = useState<any>({}); // Updated initial state to an empty object
-
+  let [albumList, setAlbumList] = useState<any>([]);
+  let [currentPlayingId, setCurrentPlaying] = useState(0);
+  let getAlbumFiles = async () => {
+    let files = await getAlbumsAsync();
+    setAlbumList(files);
+  };
   let getFiles = async () => {
     const audioFiles = await fetchAudioFiles();
     setMusicList(audioFiles);
@@ -28,13 +37,12 @@ let MusicContextProvider = ({children}: IMusicProvider) => {
 
   useEffect(() => {
     getFiles();
+    getAlbumFiles();
   }, []);
 
-  useEffect(() => {
-   
-  }, [musicList]);
+  useEffect(() => {}, [musicList]);
 
-  let values = {musicList, albumList};
+  let values = {musicList, albumList, setCurrentPlaying, currentPlayingId};
   return (
     <MusicContext.Provider value={values}>{children}</MusicContext.Provider>
   );

@@ -10,4 +10,13 @@ interface IMusicFile {
   title: string; // The track title
 }
 
-export type {IMusicFile};
+type IAlbumFile = {
+  albumSongs: number;
+  artist: string;
+  artwork: string;
+  assetsCount: string;
+  id: number | string;
+  title: string;
+  type: string | null | number | undefined;
+};
+export type {IMusicFile, IAlbumFile};

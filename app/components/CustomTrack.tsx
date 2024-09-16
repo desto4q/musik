@@ -1,17 +1,16 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, LayoutAnimation} from 'react-native';
 import {useProgress} from 'react-native-track-player';
 import TrackPlayer from 'react-native-track-player';
 import {tw} from '../utils/utils';
 import {useSheet} from '../Context/SheetContext';
 import {Slider} from '@miblanchard/react-native-slider';
 
+let configure = () => {
+  LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+};
 export default function CustomTrack() {
   const progress = useProgress();
-
-  const onEnd = (e: number[]) => {
-    TrackPlayer.seekTo(e[0]);
-  };
 
   // Function to convert seconds to "mm:ss" format
   const formatTime = (seconds: number) => {
@@ -25,7 +24,16 @@ export default function CustomTrack() {
   const duration = formatTime(progress.duration);
 
   let {colorObj} = useSheet();
+  let [sliding, setSliding] = useState(false);
+  let [currentPos, setCurrentPos] = useState(0);
+  const onEnd = async (e: number[]) => {
+    // configure();
+    setCurrentPos(e[0]);
+    setSliding(false);
 
+    await TrackPlayer.seekTo(e[0]);
+  };
+  useEffect(() => {}, [currentPos]);
   return (
     <View
       style={tw(
@@ -33,14 +41,17 @@ export default function CustomTrack() {
       )}>
       {/* Display formatted position */}
       <Text style={{color: colorObj.text}}>{position}</Text>
-
       {/* Slider */}
       <Slider
         minimumValue={0}
+        onSlidingStart={() => {
+          setSliding(true);
+          setCurrentPos(progress.position);
+        }}
         onSlidingComplete={onEnd}
         containerStyle={tw('flex-1')}
         maximumValue={progress.duration}
-        value={progress.position}
+        value={sliding ? currentPos : progress.position}
         minimumTrackTintColor={colorObj.text}
         thumbTintColor={colorObj.text}
         maximumTrackTintColor={colorObj.third}
@@ -49,8 +60,6 @@ export default function CustomTrack() {
           ...tw('h-1.5'),
         }}
       />
-
-      {/* Display formatted duration */}
       <Text style={{color: colorObj.text}}>{duration}</Text>
     </View>
   );
