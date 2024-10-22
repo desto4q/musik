@@ -13,6 +13,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        Provider(
+          create: (_) => currentPlaying(),
+        ),
         Provider<AudioPlayer>(
           create: (_) => AudioPlayer(),
           dispose: (_, player) =>
@@ -55,7 +58,6 @@ class _MyAppState extends State<MyApp> {
                 final sequenceState = snapshot.data;
                 final playlistNotEmpty =
                     sequenceState?.sequence.isNotEmpty ?? false;
-
                 return Offstage(
                   offstage: !playlistNotEmpty,
                   child: Miniplayer(

@@ -35,6 +35,7 @@ class TabHome extends StatelessWidget {
                     tag: toElement);
               }).toList(),
             );
+            final name = "main";
             return VsScrollbar(
                 controller: _scrollController,
                 child: SuperListView.builder(
@@ -43,6 +44,7 @@ class TabHome extends StatelessWidget {
                     itemCount: resp.data!.length,
                     itemBuilder: (context, item) {
                       return SongTile(
+                        name: name,
                         song: resp.data![item],
                         playlist: playlist,
                         index: item,

@@ -46,6 +46,7 @@ class GenresScreen extends StatelessWidget {
                     int index = entry.key; // The index
                     var toElement = entry.value;
                     return SongTile(
+                      name: genreModel.genre,
                       song: toElement,
                       playlist: playlist,
                       index: index,

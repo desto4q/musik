@@ -62,11 +62,14 @@ class _TabGenreState extends State<TabGenre> {
                                         child: const Icon(Icons.library_music),
                                       );
                                     }
-                                    return CachedMemoryImage(
-                                      width: 52,
-                                      height: 52,
-                                      uniqueKey: resp.data![index].toString(),
-                                      bytes: image_resp.data,
+                                    return ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: CachedMemoryImage(
+                                        width: 52,
+                                        height: 52,
+                                        uniqueKey: resp.data![index].toString(),
+                                        bytes: image_resp.data,
+                                      ),
                                     );
                                   },
                                   future: () async => OnAudioQuery()

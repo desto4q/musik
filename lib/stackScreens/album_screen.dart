@@ -65,6 +65,7 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                               artworkBorder: BorderRadius.circular(10),
                               id: widget.album.id,
                               type: ArtworkType.ALBUM,
+                              
                             ),
                           ]),
                         ),
@@ -93,6 +94,7 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                           return SizedBox(
                             width: artwork_size,
                             child: SongTile(
+                              name: widget.album.album,
                               song: toElement,
                               playlist: playlist,
                               index: index, // Pass the index here

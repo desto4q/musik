@@ -10,19 +10,27 @@ class SortModel extends ChangeNotifier {
   SongSortType _sortType = SongSortType.DATE_ADDED;
   OrderType _orderType = OrderType.ASC_OR_SMALLER;
 
-  
   // Getter for sortType
   SongSortType get sortType => _sortType;
   OrderType get orderType => _orderType;
   // Method to change the sort type and notify listeners
 
-  void changeOrderType(OrderType orderType){
+  void changeOrderType(OrderType orderType) {
     _orderType = orderType;
     notifyListeners();
-
   }
+
   void changeSortType(SongSortType sortType) {
     _sortType = sortType;
     notifyListeners(); // Notify listeners of the change
+  }
+}
+
+class currentPlaying extends ChangeNotifier{
+  String _current_playing = "";
+  String get current_Playing => _current_playing;
+  void changeCurrentPlaying(String playing) {
+    _current_playing = current_Playing;
+    notifyListeners();
   }
 }

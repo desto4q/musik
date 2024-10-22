@@ -90,11 +90,13 @@ class ArtistScreen extends StatelessWidget {
                                     tag: toElement);
                               }).toList(),
                             );
+                            final name = artistModel.artist;
                             return Column(
                               children: resp.data!.asMap().entries.map((entry) {
                                 int index = entry.key; // The index
                                 var toElement = entry.value;
                                 return SongTile(
+                                  name: name,
                                   song: toElement,
                                   playlist: playlist,
                                   index: index,

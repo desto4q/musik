@@ -2,6 +2,7 @@ import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tailwind_colors/flutter_tailwind_colors.dart';
 import 'package:illur/playerModel/player_model.dart';
+import 'package:illur/stackScreens/search_screen.dart';
 import 'package:illur/tabNav/screens/albums.dart';
 import 'package:illur/tabNav/screens/artist.dart';
 import 'package:illur/tabNav/screens/genres.dart';
@@ -40,6 +41,18 @@ class _TabNavState extends State<TabNav> {
       appBar: AppBar(
         title: Text("Musik"),
         actions: [
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                          MaterialPageRoute(builder: (builder) {
+                        return SearchScreen();
+                      }));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.search),
+            ),
+          ),
           InkWell(
             onTap: () {
               showMaterialModalBottomSheet(

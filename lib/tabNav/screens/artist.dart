@@ -28,7 +28,8 @@ class _TabArtistState extends State<TabArtist> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (builder) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (builder) {
                       return ArtistScreen(
                         artistModel: resp.data![index],
                       );
@@ -58,11 +59,14 @@ class _TabArtistState extends State<TabArtist> {
                                     child: const Icon(Icons.library_music),
                                   );
                                 }
-                                return CachedMemoryImage(
-                                  width: 52,
-                                  height: 52,
-                                  uniqueKey: resp.data![index].toString(),
-                                  bytes: image_resp.data,
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedMemoryImage(
+                                    width: 52,
+                                    height: 52,
+                                    uniqueKey: resp.data![index].toString(),
+                                    bytes: image_resp.data,
+                                  ),
                                 );
                               },
                               future: () async => OnAudioQuery().queryArtwork(

@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
+import 'package:flutter_tailwind_colors/flutter_tailwind_colors.dart';
+import 'package:illur/component/main_player_controls.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lrc/lrc.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
 import 'package:provider/provider.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 
 class LyricScreen extends StatefulWidget {
   const LyricScreen({super.key});
@@ -14,6 +17,22 @@ class LyricScreen extends StatefulWidget {
 }
 
 class _LyricScreenState extends State<LyricScreen> {
+  final ListController _listController = ListController();
+  final ScrollController _scrollController = ScrollController();
+  ValueNotifier<int?> _activeIndexNotifier = ValueNotifier<int?>(null);
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _activeIndexNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
@@ -21,47 +40,138 @@ class _LyricScreenState extends State<LyricScreen> {
     return Container(
       width: _size.width,
       height: _size.height,
-      child: Consumer<AudioPlayer>(
-        builder: (context, player, child) {
-          return StreamBuilder(
-              stream: player.sequenceStateStream,
-              builder: (builder, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Text("data");
-                }
-                final playerState = snapshot.data;
+      child: Stack(
+        children: [
+          Consumer<AudioPlayer>(
+            builder: (context, player, child) {
+              return StreamBuilder(
+                  stream: player.sequenceStateStream,
+                  builder: (builder, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final playerState = snapshot.data;
+                    final metadata =
+                        playerState?.currentSource!.tag as SongModel;
 
-                final metadata = playerState?.currentSource!.tag as SongModel;
+                    return Query([metadata.displayNameWOExt],
+                        builder: (builder, resp) {
+                          if (resp.data == null || resp.data!.isEmpty) {
+                            return const Center(
+                                child: Text("No Lyrics Available"));
+                          }
 
-                return Query([metadata.displayNameWOExt],
-                    builder: (builder, resp) {
-                      if (resp.data == null) {
-                        return const Center(child: Text("No Lyrics"));
-                      }
-                          return SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 80),
-                                ...resp.data!.map((toElement) {
-                                  return InkWell(
-                                    onTap: () {},
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        toElement.lyrics,
-                                        style: TextStyle(fontSize: 18),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ],
-                            ),
+                          return Column(
+                            children: [
+                              const SizedBox(
+                                height: 80,
+                              ),
+                              Expanded(
+                                child: StreamBuilder<Duration>(
+                                  stream: player.positionStream,
+                                  builder: (context, snapshot) {
+                                    final pos = snapshot.data ?? Duration.zero;
+                                    final List<LrcLine> lyrics = resp.data!;
+
+                                    int activeIndex = -1;
+                                    for (int i = 0; i < lyrics.length; i++) {
+                                      final LrcLine lyric = lyrics[i];
+                                      final LrcLine? nextLyric =
+                                          (i + 1 < lyrics.length)
+                                              ? lyrics[i + 1]
+                                              : null;
+
+                                      if (pos >= lyric.timestamp &&
+                                          (nextLyric == null ||
+                                              pos < nextLyric.timestamp)) {
+                                        activeIndex = i;
+                                        break;
+                                      }
+                                    }
+
+                                    if (activeIndex != -1 &&
+                                        activeIndex !=
+                                            _activeIndexNotifier.value) {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        _listController.animateToItem(
+                                            index: activeIndex,
+                                            duration: (t) =>
+                                                Duration(milliseconds: 300),
+                                            scrollController: _scrollController,
+                                            curve: (t) => Curves.easeIn,
+                                            alignment: 0.5);
+                                      });
+                                      _activeIndexNotifier.value =
+                                          activeIndex; // Update notifier value
+                                    }
+
+                                    return ValueListenableBuilder<int?>(
+                                      valueListenable: _activeIndexNotifier,
+                                      builder: (context, activeIndex, child) {
+                                        return SuperListView.builder(
+                                          padding:
+                                              const EdgeInsets.only(top: 80),
+                                          listController: _listController,
+                                          controller: _scrollController,
+                                          itemCount: lyrics.length,
+                                          itemBuilder: (context, index) {
+                                            final LrcLine currentLyric =
+                                                lyrics[index];
+                                            final bool isActiveLyric =
+                                                index == activeIndex;
+
+                                            return InkWell(
+                                              onTap: () {
+                                                player.seek(
+                                                    currentLyric.timestamp);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: AnimatedDefaultTextStyle(
+                                                  duration: const Duration(
+                                                      milliseconds: 300),
+                                                  style: TextStyle(
+                                                    fontSize: 23,
+                                                    color: isActiveLyric
+                                                        ? TWColors
+                                                            .neutral.shade200
+                                                        : TWColors
+                                                            .neutral.shade700,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                  child:
+                                                      Text(currentLyric.lyrics),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              )
+                            ],
                           );
                         },
-                    future: () async => _pathChecker(metadata));
-              });
-        },
+                        future: () async => _pathChecker(metadata));
+                  });
+            },
+          ),
+          Positioned(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MainPlayerControls(),
+              ),
+            ),
+            left: 0,
+            right: 0,
+            bottom: 0,
+          )
+        ],
       ),
     );
   }
@@ -70,7 +180,6 @@ class _LyricScreenState extends State<LyricScreen> {
 Future<List<LrcLine>> _pathChecker(SongModel metadata) async {
   final path = "storage/emulated/0/Music/${metadata.displayNameWOExt}.lrc";
   final file = await File(path);
-
   if (await file.exists()) {
     Lrc parsed = Lrc.parse(file.readAsStringSync());
     return parsed.lyrics;

@@ -132,7 +132,9 @@ class _MainPlayerState extends State<MainPlayer> {
                               )
                             ],
                           ),
-                          SizedBox(height: 12,)
+                          SizedBox(
+                            height: 12,
+                          )
                         ],
                       ),
                       const LyricScreen(),
