@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:illur/component/song_tile.dart';
@@ -87,7 +88,14 @@ class ArtistScreen extends StatelessWidget {
                               children: resp.data!.map((toElement) {
                                 return AudioSource.uri(
                                     Uri.parse(toElement.data),
-                                    tag: toElement);
+                                    tag: MediaItem(
+                                      id: toElement.id.toString(),
+                                      title: toElement.title,
+                                      album: toElement.album,
+                                      artist: toElement.artist,
+                                      
+                                      // artUri: OnAudioQuery().queryArtwork(id, type)
+                                    ));
                               }).toList(),
                             );
                             final name = artistModel.artist;

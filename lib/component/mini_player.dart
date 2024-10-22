@@ -12,7 +12,6 @@ class MiniPlay extends StatefulWidget {
 class _MiniPlayState extends State<MiniPlay> {
   @override
   Widget build(BuildContext context) {
-    // Get the AudioPlayer instance
     return Container(
       height: 80,
       padding: const EdgeInsets.all(8.0),

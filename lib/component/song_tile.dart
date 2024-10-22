@@ -5,7 +5,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:provider/provider.dart';
-
 class SongTile extends StatefulWidget {
   const SongTile(
       {super.key,
@@ -26,20 +25,21 @@ class _SongTileState extends State<SongTile> {
   Widget build(BuildContext context) {
     final player = Provider.of<AudioPlayer>(context);
 
-    return Consumer<currentPlaying>(
+    return Consumer<CurrentPlaying>(
       builder: (_, val, child) {
         return InkWell(
-          onTap: () {
-            if (val.current_Playing == widget.name) {
-              player.seek(Duration.zero, index: widget.index);
-              print(val.current_Playing);
-              return;
-            }
-            val.changeCurrentPlaying(widget.name);
-            player.stop();
-            player.setAudioSource(widget.playlist,
-                initialIndex: widget.index, initialPosition: Duration.zero);
-            player.play();
+          onTap: () async{
+            // if (val.current_Playing == widget.name) {
+            //   player.seek(Duration.zero, index: widget.index);
+            //   print(val.current_Playing);
+            //   return;
+            // }
+            // val.changeCurrentPlaying(widget.name);
+            // player.stop();
+            // player.setAudioSource(widget.playlist,
+            //     initialIndex: widget.index, initialPosition: Duration.zero);
+            // player.play();
+
           },
           child: Container(
             padding: const EdgeInsets.all(10),

@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:illur/component/song_tile.dart';
@@ -30,11 +31,18 @@ class TabHome extends StatelessWidget {
               useLazyPreparation: true,
               // Customise the shuffle algorithm
               shuffleOrder: DefaultShuffleOrder(),
+
               children: resp.data!.map((toElement) {
                 return AudioSource.uri(Uri.parse(toElement.data),
-                    tag: toElement);
+                    tag: MediaItem(
+                      id: toElement.id.toString(),
+                      title: toElement.title,
+                      album: toElement.album,
+                      artist: toElement.artist,
+                    ));
               }).toList(),
             );
+            SongModel;
             final name = "main";
             return VsScrollbar(
                 controller: _scrollController,

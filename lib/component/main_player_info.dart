@@ -1,4 +1,5 @@
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:fading_marquee_widget/fading_marquee_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tailwind_colors/flutter_tailwind_colors.dart';
@@ -24,7 +25,7 @@ class _MainPlayerInfoState extends State<MainPlayerInfo> {
         stream: player.sequenceStateStream,
         builder: (builder, snapshot) {
           final state = snapshot.data;
-          final metadata = state?.currentSource!.tag as SongModel;
+          final metadata = state?.currentSource!.tag as MediaItem;
           if (state?.sequence.isEmpty == true) {
             return const SizedBox();
           }

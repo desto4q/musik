@@ -1,5 +1,7 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
@@ -28,13 +30,13 @@ class _PlayerImageState extends State<PlayerImage> {
         stream: player.sequenceStateStream,
         builder: (builder, snapshot) {
           final state = snapshot.data;
-          final metadata = state?.currentSource!.tag as SongModel;
+          final metadata = state?.currentSource!.tag as MediaItem;
           if (state?.sequence.isEmpty == true) {
             return const SizedBox();
           }
           return Container(
             child: QueryArtworkWidget(
-              id: metadata.id,
+              id: int.parse(metadata.id),
               keepOldArtwork: true,
               artworkBorder: BorderRadius.circular(10),
               type: ArtworkType.AUDIO,

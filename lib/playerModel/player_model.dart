@@ -1,9 +1,15 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
 
-class PlayerModel {
+class PlayerModel extends BaseAudioHandler with QueueHandler, SeekHandler {
   final player = AudioPlayer();
+  Future<void> play() => player.play();
+  Future<void> pause() => player.pause();
+  Future<void> stop() => player.stop();
+  Future<void> seek(Duration position) => player.seek(position);
+  Future<void> skipToQueueItem(int i) => player.seek(Duration.zero, index: i);
 }
 
 class SortModel extends ChangeNotifier {
@@ -26,7 +32,7 @@ class SortModel extends ChangeNotifier {
   }
 }
 
-class currentPlaying extends ChangeNotifier{
+class CurrentPlaying extends ChangeNotifier {
   String _current_playing = "";
   String get current_Playing => _current_playing;
   void changeCurrentPlaying(String playing) {

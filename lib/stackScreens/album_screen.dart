@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:illur/component/song_tile.dart';
@@ -47,7 +48,13 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                       shuffleOrder: DefaultShuffleOrder(),
                       // Specify the playlist items
                       children: resp.data!.map((toElement) {
-                        return AudioSource.uri(Uri.parse(toElement.data),tag: toElement);
+                        return AudioSource.uri(Uri.parse(toElement.data),
+                    tag: MediaItem(
+                      id: toElement.id.toString(),
+                      title: toElement.title,
+                      album: toElement.album,
+                      artist: toElement.artist,
+                    ));
                       }).toList(),
                     );
 

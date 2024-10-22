@@ -1,4 +1,5 @@
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
@@ -23,7 +24,7 @@ class _MiniPlayerInfoState extends State<MiniPlayerInfo> {
         stream: player.sequenceStateStream,
         builder: (builder, snapshot) {
           final state = snapshot.data;
-          final metadata = state?.currentSource!.tag as SongModel;
+          final metadata = state?.currentSource!.tag as MediaItem;
           if (state?.sequence.isEmpty == true) {
             return const SizedBox();
           }
@@ -38,7 +39,9 @@ class _MiniPlayerInfoState extends State<MiniPlayerInfo> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-             const SizedBox(height: 4,),
+              const SizedBox(
+                height: 4,
+              ),
               SizedBox(
                 width: screenWidth * 3 / 7,
                 child: Text(

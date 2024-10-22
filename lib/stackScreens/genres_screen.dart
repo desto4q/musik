@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:illur/component/song_tile.dart';
@@ -37,7 +38,12 @@ class GenresScreen extends StatelessWidget {
                 // Specify the playlist items
                 children: res.data!.map((toElement) {
                   return AudioSource.uri(Uri.parse(toElement.data),
-                      tag: toElement);
+                      tag: MediaItem(
+                        id: toElement.id.toString(),
+                        title: toElement.title,
+                        album: toElement.album,
+                        artist: toElement.artist,
+                      ));
                 }).toList(),
               );
               return SuperListView(
