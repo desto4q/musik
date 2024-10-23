@@ -173,15 +173,21 @@ class _MainPlayerState extends State<MainPlayer> {
                                     );
                                   }),
                               InkWell(
-                                onTap: () {
+                                onTap: ()async {
+                                  setState(() {
+                                    _modalOpen = true;
+                                  });
                                   showMaterialModalBottomSheet(
                                       context: context,
                                       builder: (builder) {
                                         return const PlaylistSheet();
-                                      });
-                                  setState(() {
-                                    _modalOpen = true;
+                                      }).then((onValue){
+                                         setState(() {
+                                      _modalOpen = false;
                                   });
+                                      });
+                                  ;
+                                  
                                 },
                                 child: const Padding(
                                   padding: EdgeInsets.all(8.0),

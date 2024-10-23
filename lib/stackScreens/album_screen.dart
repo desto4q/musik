@@ -14,7 +14,8 @@ class AlbumScreen extends StatefulWidget {
   State<AlbumScreen> createState() => _AlbumScreenState();
 }
 
-class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClientMixin {
+class _AlbumScreenState extends State<AlbumScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true; // Keep this alive
 
@@ -49,13 +50,13 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                       // Specify the playlist items
                       children: resp.data!.map((toElement) {
                         return AudioSource.uri(Uri.parse(toElement.data),
-                    tag: MediaItem(
-                      id: toElement.id.toString(),
-                      title: toElement.title,
-                      album: toElement.album,
-                      artist: toElement.artist,
-                      extras: {"path": toElement.displayNameWOExt},
-                    ));
+                            tag: MediaItem(
+                              id: toElement.id.toString(),
+                              title: toElement.title,
+                              album: toElement.album,
+                              artist: toElement.artist,
+                              extras: {"path": toElement.displayNameWOExt},
+                            ));
                       }).toList(),
                     );
 
@@ -73,7 +74,6 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                               artworkBorder: BorderRadius.circular(10),
                               id: widget.album.id,
                               type: ArtworkType.ALBUM,
-                              
                             ),
                           ]),
                         ),
@@ -97,7 +97,8 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                         ),
                         ...resp.data!.asMap().entries.map((entry) {
                           int index = entry.key; // The index
-                          var toElement = entry.value; // The element at this index
+                          var toElement =
+                              entry.value; // The element at this index
 
                           return SizedBox(
                             width: artworkSize,

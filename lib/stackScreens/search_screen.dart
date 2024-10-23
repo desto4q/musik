@@ -86,12 +86,12 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: filteredSongs.map((song) {
                     return AudioSource.uri(Uri.parse(song.data),
                         tag: MediaItem(
-                            id: song.id.toString(),
-                            title: song.title,
-                            album: song.album,
-                            artist: song.artist,
-                      extras: {"path": song.displayNameWOExt},
-                           ));
+                          id: song.id.toString(),
+                          title: song.title,
+                          album: song.album,
+                          artist: song.artist,
+                          extras: {"path": song.displayNameWOExt},
+                        ));
                   }).toList(),
                 );
 
