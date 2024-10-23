@@ -34,19 +34,19 @@ Future<void> main() async {
           create: (_) => SortModel(),
         ),
       ],
-      child: const Granted(),
+      child: const MyApp(),
     ),
   );
 }
 
-class Granted extends StatefulWidget {
-  const Granted({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
   @override
-  State<Granted> createState() => _GrantedState();
+  State<MyApp> createState() => _GrantedState();
 }
 
-class _GrantedState extends State<Granted> {
+class _GrantedState extends State<MyApp> {
   bool _permissionsGranted = false;
 
   @override
@@ -81,7 +81,7 @@ class _GrantedState extends State<Granted> {
   @override
   @override
   Widget build(BuildContext context) {
-    return _permissionsGranted ? const MyApp() : const SplashPage();
+    return _permissionsGranted ? const Entry() : const SplashPage();
   }
 }
 
@@ -100,14 +100,14 @@ class SplashPage extends StatelessWidget {
   }
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class Entry extends StatefulWidget {
+  const Entry({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<Entry> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<Entry> {
   MiniplayerController controller = MiniplayerController();
 
   @override

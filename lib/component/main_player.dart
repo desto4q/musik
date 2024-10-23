@@ -186,7 +186,6 @@ class _MainPlayerState extends State<MainPlayer> {
                                       _modalOpen = false;
                                   });
                                       });
-                                  ;
                                   
                                 },
                                 child: const Padding(

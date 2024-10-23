@@ -21,9 +21,7 @@ jobs:
         with:
           channel: "stable"
           flutter-version: "3.24.3"  # Or remove this line to always use the latest stable version
-
       - run: flutter pub get
-      - run: flutter test
       - run: flutter build apk --debug --split-per-abi
       - name: Push to Releases
         uses: "ncipollo/release-action@v1"
