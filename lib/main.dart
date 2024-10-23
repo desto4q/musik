@@ -3,7 +3,6 @@ import 'package:flutter_tailwind_colors/flutter_tailwind_colors.dart';
 import 'package:illur/component/main_player.dart';
 import 'package:illur/component/mini_player.dart';
 import 'package:illur/playerModel/player_model.dart';
-import 'package:illur/tabNav/screens/home.dart';
 import 'package:illur/tabNav/tab_nav.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -35,7 +34,7 @@ Future<void> main() async {
           create: (_) => SortModel(),
         ),
       ],
-      child: Granted(),
+      child: const Granted(),
     ),
   );
 }
@@ -134,7 +133,7 @@ class _MyAppState extends State<MyApp> {
                   onGenerateRoute: (RouteSettings settings) =>
                       MaterialPageRoute(
                     settings: settings,
-                    builder: (BuildContext context) => TabNav(),
+                    builder: (BuildContext context) => const TabNav(),
                   ),
                 ),
                 StreamBuilder(

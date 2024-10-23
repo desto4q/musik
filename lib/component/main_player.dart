@@ -25,6 +25,7 @@ class MainPlayer extends StatefulWidget {
 
 class _MainPlayerState extends State<MainPlayer> {
   int _selectedIndex = 0;
+  bool _modalOpen = false;
   @override
   void initState() {
     super.initState();
@@ -38,6 +39,9 @@ class _MainPlayerState extends State<MainPlayer> {
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (_modalOpen) {
+      return false;
+    }
     if (_selectedIndex > 0) {
       setState(() {
         _selectedIndex = 0;
@@ -123,9 +127,9 @@ class _MainPlayerState extends State<MainPlayer> {
                                         player.setShuffleModeEnabled(!shuffles);
                                       },
                                       child: Padding(
-                                        padding: EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(8.0),
                                         child: shuffles
-                                            ? Icon(
+                                            ? const Icon(
                                                 Icons.shuffle,
                                               )
                                             : Icon(
@@ -139,26 +143,27 @@ class _MainPlayerState extends State<MainPlayer> {
                               StreamBuilder<LoopMode>(
                                   stream: player.loopModeStream,
                                   builder: (context, snapshot) {
-                                    final _loopmode = snapshot.data;
+                                    final loopmode = snapshot.data;
 
                                     return InkWell(
                                       onTap: () {
-                                        if (_loopmode == LoopMode.one) {
+                                        if (loopmode == LoopMode.one) {
                                           player.setLoopMode(LoopMode.all);
                                           return;
                                         }
-                                        if (_loopmode == LoopMode.all) {
+                                        if (loopmode == LoopMode.all) {
                                           player.setLoopMode(LoopMode.off);
                                           return;
                                         }
                                         player.setLoopMode(LoopMode.one);
                                       },
                                       child: Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: _loopmode == LoopMode.one
-                                            ? Icon(Icons.repeat)
-                                            : _loopmode == LoopMode.all
-                                                ? Icon(Icons.repeat_on_outlined)
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: loopmode == LoopMode.one
+                                            ? const Icon(Icons.repeat)
+                                            : loopmode == LoopMode.all
+                                                ? const Icon(
+                                                    Icons.repeat_on_outlined)
                                                 : Icon(
                                                     Icons.repeat,
                                                     color: TWColors
@@ -172,8 +177,11 @@ class _MainPlayerState extends State<MainPlayer> {
                                   showMaterialModalBottomSheet(
                                       context: context,
                                       builder: (builder) {
-                                        return PlaylistSheet();
+                                        return const PlaylistSheet();
                                       });
+                                  setState(() {
+                                    _modalOpen = true;
+                                  });
                                 },
                                 child: const Padding(
                                   padding: EdgeInsets.all(8.0),

@@ -22,18 +22,18 @@ class _PlaylistSheetState extends State<PlaylistSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
-    final AudioPlayer _player = Provider.of<AudioPlayer>(context);
+    final Size size = MediaQuery.of(context).size;
+    final AudioPlayer player = Provider.of<AudioPlayer>(context);
 
-    return Container(
-      height: _size.height - 100,
-      width: _size.width,
+    return SizedBox(
+      height: size.height - 100,
+      width: size.width,
       child: StreamBuilder<SequenceState?>(
-        stream: _player.sequenceStateStream,
+        stream: player.sequenceStateStream,
         builder: (context, snapshot) {
           final sequenceState = snapshot.data;
           if (!snapshot.hasData || sequenceState!.effectiveSequence.isEmpty) {
-            return Center(child: Text("No songs in playlist"));
+            return const Center(child: Text("No songs in playlist"));
           }
 
           // Retrieve the playlist and current index
@@ -43,16 +43,14 @@ class _PlaylistSheetState extends State<PlaylistSheet> {
           int? currentIndex = sequenceState.currentIndex;
 
           // Scroll to the current playing song
-          if (currentIndex != null) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              _listController.jumpToItem(
-                alignment: 0,
-                index: currentIndex,
-                scrollController: _scrollController,
-              );
-            });
-          }
-
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _listController.jumpToItem(
+              alignment: 0,
+              index: currentIndex,
+              scrollController: _scrollController,
+            );
+          });
+        
           return VsScrollbar(
             controller: _scrollController,
             child: SuperListView.builder(
@@ -61,7 +59,7 @@ class _PlaylistSheetState extends State<PlaylistSheet> {
               itemCount: playlist.length,
               itemBuilder: (context, index) {
                 return PlaylistTile(
-                  player: _player,
+                  player: player,
                   song: playlist[index],
                   index: index,
                 );
@@ -93,7 +91,7 @@ class PlaylistTile extends StatelessWidget {
         _player.seek(Duration.zero, index: index);
       },
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Row(
           children: [
             SizedBox(
@@ -129,7 +127,7 @@ class PlaylistTile extends StatelessWidget {
                         size: 52,
                       )),
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Expanded(
@@ -141,7 +139,7 @@ class PlaylistTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 Text(

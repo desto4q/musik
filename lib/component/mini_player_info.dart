@@ -33,7 +33,7 @@ class _MiniPlayerInfoState extends State<MiniPlayerInfo> {
               SizedBox(
                 width: screenWidth * 3 / 7,
                 child: Text(
-                  metadata.extras?["path"] ?? "",
+                  metadata.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

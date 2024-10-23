@@ -90,7 +90,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             title: song.title,
                             album: song.album,
                             artist: song.artist,
-                            displayTitle: song.displayNameWOExt));
+                      extras: {"path": song.displayNameWOExt},
+                           ));
                   }).toList(),
                 );
 

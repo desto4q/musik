@@ -6,7 +6,6 @@ import 'package:illur/component/main_player_controls.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:lrc/lrc.dart';
-import 'package:on_audio_query_forked/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 

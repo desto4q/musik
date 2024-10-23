@@ -27,7 +27,7 @@ const List<Map<String, Widget>> TabItemList = [
 ];
 
 final TabList = [
-  TabHome(),
+  const TabHome(),
   const TabAlbums(),
   const TabArtist(),
   const TabGenre(),
