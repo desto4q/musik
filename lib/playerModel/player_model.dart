@@ -5,10 +5,15 @@ import 'package:on_audio_query_forked/on_audio_query.dart';
 
 class PlayerModel extends BaseAudioHandler with QueueHandler, SeekHandler {
   final player = AudioPlayer();
+  @override
   Future<void> play() => player.play();
+  @override
   Future<void> pause() => player.pause();
+  @override
   Future<void> stop() => player.stop();
+  @override
   Future<void> seek(Duration position) => player.seek(position);
+  @override
   Future<void> skipToQueueItem(int i) => player.seek(Duration.zero, index: i);
 }
 

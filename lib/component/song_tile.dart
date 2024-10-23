@@ -29,16 +29,16 @@ class _SongTileState extends State<SongTile> {
       builder: (_, val, child) {
         return InkWell(
           onTap: () async{
-            // if (val.current_Playing == widget.name) {
-            //   player.seek(Duration.zero, index: widget.index);
-            //   print(val.current_Playing);
-            //   return;
-            // }
-            // val.changeCurrentPlaying(widget.name);
-            // player.stop();
-            // player.setAudioSource(widget.playlist,
-            //     initialIndex: widget.index, initialPosition: Duration.zero);
-            // player.play();
+            if (val.current_Playing == widget.name) {
+              player.seek(Duration.zero, index: widget.index);
+              print(val.current_Playing);
+              return;
+            }
+            val.changeCurrentPlaying(widget.name);
+            player.stop();
+            player.setAudioSource(widget.playlist,
+                initialIndex: widget.index, initialPosition: Duration.zero);
+            player.play();
 
           },
           child: Container(

@@ -59,8 +59,8 @@ class ArtistScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
                             vertical: 8.0, horizontal: 8.0),
                         child: Text(
                           "Tracks",
@@ -71,7 +71,7 @@ class ArtistScreen extends StatelessWidget {
                           builder: (builder, resp) {
                             if (resp.loading) {
                               return const Center(
-                                child: const Text("loading"),
+                                child: Text("loading"),
                               );
                             }
                             if (resp.error != null) {
@@ -93,7 +93,10 @@ class ArtistScreen extends StatelessWidget {
                                       title: toElement.title,
                                       album: toElement.album,
                                       artist: toElement.artist,
-                                      
+                                      extras: {
+                                        "path": toElement.displayNameWOExt
+                                      },
+
                                       // artUri: OnAudioQuery().queryArtwork(id, type)
                                     ));
                               }).toList(),
@@ -114,7 +117,7 @@ class ArtistScreen extends StatelessWidget {
                           },
                           future: () async => OnAudioQuery().queryAudiosFrom(
                               AudiosFromType.ARTIST_ID, artistModel.id)),
-                      SizedBox(
+                      const SizedBox(
                         height: 120,
                       )
                     ],

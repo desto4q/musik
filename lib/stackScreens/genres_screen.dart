@@ -20,12 +20,12 @@ class GenresScreen extends StatelessWidget {
         child: Query([genreModel.genre.toString()],
             builder: (builder, res) {
               if (res.loading) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
               if (res.error != null) {
-                return (Center(
+                return (const Center(
                   child: Text("error"),
                 ));
               }
@@ -43,6 +43,7 @@ class GenresScreen extends StatelessWidget {
                         title: toElement.title,
                         album: toElement.album,
                         artist: toElement.artist,
+                        extras: {"path": toElement.displayNameWOExt},
                       ));
                 }).toList(),
               );
@@ -57,7 +58,7 @@ class GenresScreen extends StatelessWidget {
                       playlist: playlist,
                       index: index,
                     );
-                  }).toList()
+                  })
                 ],
               );
             },

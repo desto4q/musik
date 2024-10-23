@@ -22,7 +22,7 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
   Widget build(BuildContext context) {
     super.build(context); // Don't forget to call super.build
     double screenWidth = MediaQuery.of(context).size.width;
-    double artwork_size = screenWidth - 40;
+    double artworkSize = screenWidth - 40;
 
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +38,7 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                       return Text(resp.error.toString());
                     }
                     if (resp.loading) {
-                      return Text("loading");
+                      return const Text("loading");
                     }
 
                     final playlist = ConcatenatingAudioSource(
@@ -54,20 +54,21 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                       title: toElement.title,
                       album: toElement.album,
                       artist: toElement.artist,
+                      extras: {"path": toElement.displayNameWOExt},
                     ));
                       }).toList(),
                     );
 
                     return SuperListView(
                       children: [
-                        Container(
-                          width: artwork_size,
-                          height: artwork_size,
+                        SizedBox(
+                          width: artworkSize,
+                          height: artworkSize,
                           child: Column(children: [
                             QueryArtworkWidget(
                               keepOldArtwork: true,
-                              artworkHeight: artwork_size,
-                              artworkWidth: artwork_size,
+                              artworkHeight: artworkSize,
+                              artworkWidth: artworkSize,
                               artworkFit: BoxFit.contain,
                               artworkBorder: BorderRadius.circular(10),
                               id: widget.album.id,
@@ -76,17 +77,17 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                             ),
                           ]),
                         ),
-                        Container(
-                          width: artwork_size,
+                        SizedBox(
+                          width: artworkSize,
                           child: Column(
                             children: [
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               SizedBox(
-                                width: artwork_size,
+                                width: artworkSize,
                                 child: Text("Album: ${widget.album.album}"),
                               ),
                               SizedBox(
-                                width: artwork_size,
+                                width: artworkSize,
                                 child: Text(
                                   "Artist: ${widget.album.artist ?? "No artist"}",
                                 ),
@@ -99,7 +100,7 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                           var toElement = entry.value; // The element at this index
 
                           return SizedBox(
-                            width: artwork_size,
+                            width: artworkSize,
                             child: SongTile(
                               name: widget.album.album,
                               song: toElement,
@@ -107,8 +108,8 @@ class _AlbumScreenState extends State<AlbumScreen> with AutomaticKeepAliveClient
                               index: index, // Pass the index here
                             ),
                           );
-                        }).toList(),
-                        SizedBox(height: 90),
+                        }),
+                        const SizedBox(height: 90),
                       ],
                     );
                   },

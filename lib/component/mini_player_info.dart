@@ -2,7 +2,6 @@ import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:on_audio_query_forked/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 class MiniPlayerInfo extends StatefulWidget {
@@ -34,7 +33,7 @@ class _MiniPlayerInfoState extends State<MiniPlayerInfo> {
               SizedBox(
                 width: screenWidth * 3 / 7,
                 child: Text(
-                  metadata.title,
+                  metadata.extras?["path"] ?? "",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

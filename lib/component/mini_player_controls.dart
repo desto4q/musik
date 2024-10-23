@@ -21,8 +21,8 @@ class MiniPlayerControls extends StatelessWidget {
                 onTap: () {
                   player.seekToPrevious();
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                child: const Padding(
+                  padding: EdgeInsets.all(4.0),
                   child: Icon(Icons.skip_previous),
                 ),
               ),
@@ -49,8 +49,8 @@ class MiniPlayerControls extends StatelessWidget {
                 onTap: () {
                   player.seekToNext();
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                child: const Padding(
+                  padding: EdgeInsets.all(4.0),
                   child: Icon(Icons.skip_next),
                 ),
               ),

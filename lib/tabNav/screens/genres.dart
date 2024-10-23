@@ -20,14 +20,14 @@ class _TabGenreState extends State<TabGenre> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Query(["genres"],
+      body: Query(const ["genres"],
           builder: (builder, resp) {
             return VsScrollbar(
               controller: _scrollController,
               child: SuperListView.builder(
                 controller: _scrollController,
                 itemCount: resp.data!.length,
-                padding: EdgeInsets.only(bottom: 90),
+                padding: const EdgeInsets.only(bottom: 90),
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
@@ -46,15 +46,15 @@ class _TabGenreState extends State<TabGenre> {
                               width: 58,
                               height: 58,
                               child: Query([resp.data![index].id.toString()],
-                                  builder: (builder, image_resp) {
-                                    if (image_resp.error != null) {
-                                      return Container(
+                                  builder: (builder, imageResp) {
+                                    if (imageResp.error != null) {
+                                      return const SizedBox(
                                         width: 52,
                                         height: 52,
-                                        child: const Icon(Icons.library_music),
+                                        child: Icon(Icons.library_music),
                                       );
                                     }
-                                    if (image_resp.loading) {
+                                    if (imageResp.loading) {
                                       return Container(
                                         width: 52,
                                         height: 52,
@@ -68,14 +68,14 @@ class _TabGenreState extends State<TabGenre> {
                                         width: 52,
                                         height: 52,
                                         uniqueKey: resp.data![index].toString(),
-                                        bytes: image_resp.data,
+                                        bytes: imageResp.data,
                                       ),
                                     );
                                   },
                                   future: () async => OnAudioQuery()
                                       .queryArtwork(resp.data![index].id,
                                           ArtworkType.GENRE))),
-                          SizedBox(
+                          const SizedBox(
                             width: 12,
                           ),
                           Expanded(

@@ -10,11 +10,11 @@ import 'package:super_sliver_list/super_sliver_list.dart';
 import 'package:vs_scrollbar/vs_scrollbar.dart';
 
 class TabHome extends StatelessWidget {
-  TabHome({super.key});
+  const TabHome({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController _scrollController = ScrollController();
+    final ScrollController scrollController = ScrollController();
     return Container(child: Consumer<SortModel>(builder: (context, val, chi) {
       return Query(["audio", val.sortType.name, val.orderType.name],
           builder: (builder, resp) {
@@ -39,16 +39,17 @@ class TabHome extends StatelessWidget {
                       title: toElement.title,
                       album: toElement.album,
                       artist: toElement.artist,
+                      extras: {"path": toElement.displayNameWOExt},
                     ));
               }).toList(),
             );
             SongModel;
-            final name = "main";
+            const name = "main";
             return VsScrollbar(
-                controller: _scrollController,
+                controller: scrollController,
                 child: SuperListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    controller: _scrollController,
+                    controller: scrollController,
                     itemCount: resp.data!.length,
                     itemBuilder: (context, item) {
                       return SongTile(

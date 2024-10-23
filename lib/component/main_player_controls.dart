@@ -10,7 +10,7 @@ class MainPlayerControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final player = Provider.of<AudioPlayer>(context);
-    final double control_size = 52;
+    const double controlSize = 52;
     return StreamBuilder<PlayerState>(
         stream: player.playerStateStream,
         builder: (c, snapshot) {
@@ -23,11 +23,11 @@ class MainPlayerControls extends StatelessWidget {
                 onTap: () {
                   player.seekToPrevious();
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                child: const Padding(
+                  padding: EdgeInsets.all(4.0),
                   child: Icon(
                     Icons.skip_previous,
-                    size: control_size,
+                    size: controlSize,
                   ),
                 ),
               ),
@@ -43,7 +43,7 @@ class MainPlayerControls extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Icon(
-                    playing == true ? Icons.pause : Icons.play_arrow,size: control_size,
+                    playing == true ? Icons.pause : Icons.play_arrow,size: controlSize,
                   ),
                 ),
               ),
@@ -52,11 +52,11 @@ class MainPlayerControls extends StatelessWidget {
                 onTap: () {
                   player.seekToNext();
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                child: const Padding(
+                  padding: EdgeInsets.all(4.0),
                   child: Icon(
                     Icons.skip_next,
-                    size: control_size,
+                    size: controlSize,
                   ),
                 ),
               ),

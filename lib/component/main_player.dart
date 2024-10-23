@@ -1,12 +1,15 @@
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tailwind_colors/flutter_tailwind_colors.dart';
 import 'package:illur/component/lyric_screen.dart';
 import 'package:illur/component/main_player_controls.dart';
 import 'package:illur/component/main_player_info.dart';
 import 'package:illur/component/player_image.dart';
+import 'package:illur/component/playlist_sheet.dart';
 import 'package:illur/component/progress_bar.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:miniplayer/miniplayer.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 
@@ -22,6 +25,7 @@ class MainPlayer extends StatefulWidget {
 
 class _MainPlayerState extends State<MainPlayer> {
   int _selectedIndex = 0;
+  @override
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
@@ -93,7 +97,7 @@ class _MainPlayerState extends State<MainPlayer> {
                             height: 24,
                           ),
                           const MainPlayerControls(),
-                          Spacer(),
+                          const Spacer(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -109,22 +113,68 @@ class _MainPlayerState extends State<MainPlayer> {
                                   child: Icon(Icons.lyrics),
                                 ),
                               ),
+                              StreamBuilder(
+                                  stream: player.shuffleModeEnabledStream,
+                                  builder: (context, snapshot) {
+                                    bool shuffles = snapshot.data as bool;
+
+                                    return InkWell(
+                                      onTap: () {
+                                        player.setShuffleModeEnabled(!shuffles);
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: shuffles
+                                            ? Icon(
+                                                Icons.shuffle,
+                                              )
+                                            : Icon(
+                                                Icons.shuffle,
+                                                color:
+                                                    TWColors.neutral.shade600,
+                                              ),
+                                      ),
+                                    );
+                                  }),
+                              StreamBuilder<LoopMode>(
+                                  stream: player.loopModeStream,
+                                  builder: (context, snapshot) {
+                                    final _loopmode = snapshot.data;
+
+                                    return InkWell(
+                                      onTap: () {
+                                        if (_loopmode == LoopMode.one) {
+                                          player.setLoopMode(LoopMode.all);
+                                          return;
+                                        }
+                                        if (_loopmode == LoopMode.all) {
+                                          player.setLoopMode(LoopMode.off);
+                                          return;
+                                        }
+                                        player.setLoopMode(LoopMode.one);
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: _loopmode == LoopMode.one
+                                            ? Icon(Icons.repeat)
+                                            : _loopmode == LoopMode.all
+                                                ? Icon(Icons.repeat_on_outlined)
+                                                : Icon(
+                                                    Icons.repeat,
+                                                    color: TWColors
+                                                        .neutral.shade600,
+                                                  ),
+                                      ),
+                                    );
+                                  }),
                               InkWell(
-                                onTap: () {},
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(Icons.shuffle),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {},
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(Icons.repeat),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  showMaterialModalBottomSheet(
+                                      context: context,
+                                      builder: (builder) {
+                                        return PlaylistSheet();
+                                      });
+                                },
                                 child: const Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Icon(Icons.playlist_add_check),
@@ -132,7 +182,7 @@ class _MainPlayerState extends State<MainPlayer> {
                               )
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 12,
                           )
                         ],

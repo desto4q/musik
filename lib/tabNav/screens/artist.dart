@@ -43,15 +43,15 @@ class _TabArtistState extends State<TabArtist> {
                           width: 52,
                           height: 52,
                           child: Query([resp.data![index].id],
-                              builder: (builder, image_resp) {
-                                if (image_resp.error != null) {
-                                  return Container(
+                              builder: (builder, imageResp) {
+                                if (imageResp.error != null) {
+                                  return const SizedBox(
                                     width: 52,
                                     height: 52,
-                                    child: const Icon(Icons.library_music),
+                                    child: Icon(Icons.library_music),
                                   );
                                 }
-                                if (image_resp.loading) {
+                                if (imageResp.loading) {
                                   return Container(
                                     width: 52,
                                     height: 52,
@@ -65,7 +65,7 @@ class _TabArtistState extends State<TabArtist> {
                                     width: 52,
                                     height: 52,
                                     uniqueKey: resp.data![index].toString(),
-                                    bytes: image_resp.data,
+                                    bytes: imageResp.data,
                                   ),
                                 );
                               },

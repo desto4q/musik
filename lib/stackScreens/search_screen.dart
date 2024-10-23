@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:illur/component/song_tile.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({super.key});
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -78,12 +79,18 @@ class _SearchScreenState extends State<SearchScreen> {
                       songArtist.contains(_searchQuery);
                 }).toList();
 
-                final name = "main";
+                const name = "main";
                 final playlist = ConcatenatingAudioSource(
                   useLazyPreparation: true,
                   shuffleOrder: DefaultShuffleOrder(),
                   children: filteredSongs.map((song) {
-                    return AudioSource.uri(Uri.parse(song.data), tag: song);
+                    return AudioSource.uri(Uri.parse(song.data),
+                        tag: MediaItem(
+                            id: song.id.toString(),
+                            title: song.title,
+                            album: song.album,
+                            artist: song.artist,
+                            displayTitle: song.displayNameWOExt));
                   }).toList(),
                 );
 

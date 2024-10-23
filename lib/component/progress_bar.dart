@@ -13,6 +13,7 @@ class MyProgressBar extends StatefulWidget {
 
 class _MyProgressBarState extends State<MyProgressBar>
     with TickerProviderStateMixin {
+  @override
   void initState() {
     super.initState();
   }
@@ -20,7 +21,7 @@ class _MyProgressBarState extends State<MyProgressBar>
   @override
   Widget build(BuildContext context) {
     final player = Provider.of<AudioPlayer>(context);
-    Stream<PositionedData> _positionDataStream() {
+    Stream<PositionedData> positionDataStream() {
       return Rx.combineLatest3<Duration, Duration, Duration?, PositionedData>(
           player.positionStream,
           player.bufferedPositionStream,
@@ -29,11 +30,11 @@ class _MyProgressBarState extends State<MyProgressBar>
               position, bufferedPosition, duration ?? Duration.zero));
     }
 
-    return Container(
+    return SizedBox(
       width: widget.width,
       child: Center(
         child: StreamBuilder<PositionedData>(
-          stream: _positionDataStream(),
+          stream: positionDataStream(),
           builder: (context, snapshot) {
             final positionData = snapshot.data;
             return ProgressBar(

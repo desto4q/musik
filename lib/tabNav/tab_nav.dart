@@ -28,9 +28,9 @@ const List<Map<String, Widget>> TabItemList = [
 
 final TabList = [
   TabHome(),
-  TabAlbums(),
-  TabArtist(),
-  TabGenre(),
+  const TabAlbums(),
+  const TabArtist(),
+  const TabGenre(),
 ];
 
 class _TabNavState extends State<TabNav> {
@@ -39,17 +39,17 @@ class _TabNavState extends State<TabNav> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Musik"),
+        title: const Text("Musik"),
         actions: [
           InkWell(
             onTap: () {
               Navigator.push(context,
                           MaterialPageRoute(builder: (builder) {
-                        return SearchScreen();
+                        return const SearchScreen();
                       }));
             },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Icon(Icons.search),
             ),
           ),
@@ -60,19 +60,19 @@ class _TabNavState extends State<TabNav> {
                   enableDrag: true,
                   useRootNavigator: true,
                   builder: (builder) {
-                    Size _size = MediaQuery.of(context).size;
-                    return Container(
-                      height: _size.height - 180,
-                      width: _size.width,
+                    Size size = MediaQuery.of(context).size;
+                    return SizedBox(
+                      height: size.height - 180,
+                      width: size.width,
                       child:
                           Consumer<SortModel>(builder: (context, val, child) {
                         return SingleChildScrollView(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: Text("Sort Order"),
                                 ),
                                 Column(
@@ -92,7 +92,7 @@ class _TabNavState extends State<TabNav> {
                                                       toElement.name
                                                   ? Icons.circle
                                                   : Icons.circle_outlined),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 4,
                                               ),
                                               Text(toElement.name)
@@ -142,8 +142,8 @@ class _TabNavState extends State<TabNav> {
                     );
                   });
             },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Icon(Icons.menu),
             ),
           ),

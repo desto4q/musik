@@ -4,6 +4,7 @@ import 'package:flutter_requery/flutter_requery.dart';
 import 'package:flutter_tailwind_colors/flutter_tailwind_colors.dart';
 import 'package:illur/component/main_player_controls.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:lrc/lrc.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,7 @@ class LyricScreen extends StatefulWidget {
 class _LyricScreenState extends State<LyricScreen> {
   final ListController _listController = ListController();
   final ScrollController _scrollController = ScrollController();
-  ValueNotifier<int?> _activeIndexNotifier = ValueNotifier<int?>(null);
+  final ValueNotifier<int?> _activeIndexNotifier = ValueNotifier<int?>(null);
   @override
   void dispose() {
     _scrollController.dispose();
@@ -30,16 +31,15 @@ class _LyricScreenState extends State<LyricScreen> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
 
-    return Container(
-      width: _size.width,
-      height: _size.height,
+    return SizedBox(
+      width: size.width,
+      height: size.height,
       child: Stack(
         children: [
           Consumer<AudioPlayer>(
@@ -52,9 +52,9 @@ class _LyricScreenState extends State<LyricScreen> {
                     }
                     final playerState = snapshot.data;
                     final metadata =
-                        playerState?.currentSource!.tag as SongModel;
+                        playerState?.currentSource!.tag as MediaItem;
 
-                    return Query([metadata.displayNameWOExt],
+                    return Query([metadata.extras?["path"] ?? "empty"],
                         builder: (builder, resp) {
                           if (resp.data == null || resp.data!.isEmpty) {
                             return const Center(
@@ -96,8 +96,8 @@ class _LyricScreenState extends State<LyricScreen> {
                                           .addPostFrameCallback((_) {
                                         _listController.animateToItem(
                                             index: activeIndex,
-                                            duration: (t) =>
-                                                Duration(milliseconds: 300),
+                                            duration: (t) => const Duration(
+                                                milliseconds: 300),
                                             scrollController: _scrollController,
                                             curve: (t) => Curves.easeIn,
                                             alignment: 0.5);
@@ -160,16 +160,16 @@ class _LyricScreenState extends State<LyricScreen> {
                   });
             },
           ),
-          Positioned(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MainPlayerControls(),
-              ),
-            ),
+          const Positioned(
             left: 0,
             right: 0,
             bottom: 0,
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: MainPlayerControls(),
+              ),
+            ),
           )
         ],
       ),
@@ -177,9 +177,9 @@ class _LyricScreenState extends State<LyricScreen> {
   }
 }
 
-Future<List<LrcLine>> _pathChecker(SongModel metadata) async {
-  final path = "storage/emulated/0/Music/${metadata.displayNameWOExt}.lrc";
-  final file = await File(path);
+Future<List<LrcLine>> _pathChecker(MediaItem metadata) async {
+  final path = "storage/emulated/0/Music/${metadata.extras?["path"]}.lrc";
+  final file = File(path);
   if (await file.exists()) {
     Lrc parsed = Lrc.parse(file.readAsStringSync());
     return parsed.lyrics;
