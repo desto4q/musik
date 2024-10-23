@@ -1,12 +1,11 @@
 on:
   pull_request:
-    branchces:
+    branches:
       - master
 
   push:
-    brances:
+    branches:
       - master
-
 
 name: "Build & Release"
 jobs:
@@ -14,19 +13,19 @@ jobs:
     name: "Build & Release"
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v1
         with:
           java-version: "17.x"
       - uses: subosito/flutter-action@v2
-        with: 
-          flutter-version: "3.2.x"
-      - run:  flutter pub get
-      - run:  test
+        with:
+          flutter-version: "3.2.0"  # Or remove this line to always use the latest stable version
+      - run: flutter pub get
+      - run: flutter test
       - run: flutter build apk --debug --split-per-abi
       - name: Push to Releases
         uses: "ncipollo/release-action@v1"
         with:
           artifacts: "build/app/outputs/apk/debug/*"
-          tag: v1.0.${{ github.run_number}} 
+          tag: v1.0.${{ github.run_number }}
           token: ${{secrets.new_token_linux}}
