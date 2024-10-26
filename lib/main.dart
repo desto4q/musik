@@ -94,9 +94,10 @@ class SplashPage extends StatelessWidget {
       theme: ThemeData.dark(),
       home: Scaffold(
         body: Center(
-          child: Text("Musik",style: TextStyle(
-            fontSize: 32
-          ),),
+          child: Text(
+            "Musik",
+            style: TextStyle(fontSize: 32),
+          ),
         ),
       ),
     );

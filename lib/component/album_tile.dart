@@ -20,8 +20,10 @@ class _AlbumTileState extends State<AlbumTile> {
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: InkWell(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (builder){
-            return AlbumScreen( album: widget.album,);
+          Navigator.push(context, MaterialPageRoute(builder: (builder) {
+            return AlbumScreen(
+              album: widget.album,
+            );
           }));
         },
         child: Padding(
@@ -40,7 +42,6 @@ class _AlbumTileState extends State<AlbumTile> {
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: CachedMemoryImage(
-                        
                         filterQuality: FilterQuality.low,
                         uniqueKey: widget.album.id.toString(),
                         bytes: resp.data,

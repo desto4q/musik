@@ -37,7 +37,6 @@ class _PlaylistSheetState extends State<PlaylistSheet> {
           if (!snapshot.hasData || sequenceState!.effectiveSequence.isEmpty) {
             return const Center(child: Text("No songs in playlist"));
           }
-
           // Retrieve the playlist and current index
           List<MediaItem> playlist = sequenceState.effectiveSequence
               .map((audioSource) => audioSource.tag as MediaItem)

@@ -54,8 +54,8 @@ class _LyricScreenState extends State<LyricScreen> {
                         index: 0,
                         scrollController: _scrollController,
                         alignment: 0,
-                        duration: (t)=>Duration(milliseconds: 300),
-                        curve: (t)=>Curves.easeIn);
+                        duration: (t) => Duration(milliseconds: 300),
+                        curve: (t) => Curves.easeIn);
                     final playerState = snapshot.data;
                     final metadata =
                         playerState?.currentSource!.tag as MediaItem;
