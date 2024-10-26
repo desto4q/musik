@@ -81,7 +81,7 @@ class _MainPlayerState extends State<MainPlayer> {
                           const SizedBox(
                             height: 60,
                           ),
-                          Text(playerState!.processingState.name.toString()),
+                          // Text(playerState!.processingState.name.toString()),
                           Center(
                             child: PlayerImage(height: width, width: width),
                           ),
@@ -173,7 +173,7 @@ class _MainPlayerState extends State<MainPlayer> {
                                     );
                                   }),
                               InkWell(
-                                onTap: ()async {
+                                onTap: () async {
                                   setState(() {
                                     _modalOpen = true;
                                   });
@@ -181,12 +181,12 @@ class _MainPlayerState extends State<MainPlayer> {
                                       context: context,
                                       builder: (builder) {
                                         return const PlaylistSheet();
-                                      }).then((onValue){
-                                         setState(() {
+                                      }).then((onValue) {
+                                    setState(() {
                                       _modalOpen = false;
+                                    });
                                   });
-                                      });
-                                  
+                                  ;
                                 },
                                 child: const Padding(
                                   padding: EdgeInsets.all(8.0),

@@ -2,6 +2,7 @@ import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:flutter_tailwind_colors/flutter_tailwind_colors.dart';
+import 'package:illur/component/playlist_tile.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
@@ -19,6 +20,7 @@ class PlaylistSheet extends StatefulWidget {
 class _PlaylistSheetState extends State<PlaylistSheet> {
   final ListController _listController = ListController();
   final ScrollController _scrollController = ScrollController();
+  int? _lastAnimatedIndex; // Track last animated index
 
   @override
   Widget build(BuildContext context) {
@@ -42,116 +44,60 @@ class _PlaylistSheetState extends State<PlaylistSheet> {
               .toList();
           int? currentIndex = sequenceState.currentIndex;
 
-          // Scroll to the current playing song
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _listController.jumpToItem(
-              alignment: 0,
-              index: currentIndex,
-              scrollController: _scrollController,
-            );
-          });
-        
-          return VsScrollbar(
-            controller: _scrollController,
-            child: SuperListView.builder(
-              controller: _scrollController,
-              listController: _listController,
-              itemCount: playlist.length,
-              itemBuilder: (context, index) {
-                return PlaylistTile(
-                  player: player,
-                  song: playlist[index],
-                  index: index,
-                );
-              },
-            ),
+          // Scroll to the current playing song only if currentIndex changed
+
+          return Column(
+            children: [
+              currentIndex != null
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          child: Text("Now Playing"),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            _listController.animateToItem(
+                                index: player.currentIndex ?? 0,
+                                scrollController: _scrollController,
+                                alignment: 0,
+                                duration: (t) => Duration(milliseconds: 300),
+                                curve: (t) => Curves.easeIn);
+                          },
+                          child: IgnorePointer(
+                            ignoring: true,
+                            child: PlaylistTile(
+                                player: player,
+                                song: playlist[currentIndex],
+                                index: currentIndex),
+                          ),
+                        )
+                      ],
+                    )
+                  : Container(),
+              const Divider(height: 3),
+              Expanded(
+                child: VsScrollbar(
+                  controller: _scrollController,
+                  child: SuperListView.builder(
+                    controller: _scrollController,
+                    listController: _listController,
+                    itemCount: playlist.length,
+                    itemBuilder: (context, index) {
+                      return PlaylistTile(
+                        player: player,
+                        song: playlist[index],
+                        index: index,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
           );
         },
-      ),
-    );
-  }
-}
-
-class PlaylistTile extends StatelessWidget {
-  const PlaylistTile({
-    super.key,
-    required AudioPlayer player,
-    required this.song,
-    required this.index,
-  }) : _player = player;
-
-  final int index;
-  final AudioPlayer _player;
-  final MediaItem song;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        _player.seek(Duration.zero, index: index);
-      },
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            SizedBox(
-              height: 52,
-              width: 52,
-              child: Query(song.id,
-                  builder: (builder, resp) {
-                    if (resp.error != null) {
-                      return const Text("err");
-                    }
-                    if (resp.loading) {
-                      return const Icon(Icons.music_note);
-                    }
-                    // returnText(resp.data.toString());
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: CachedMemoryImage(
-                        height: 52,
-                        width: 52,
-                        filterQuality: FilterQuality.low,
-                        uniqueKey: "${song.id} playlist",
-                        bytes: resp.data,
-                        errorWidget: const Center(
-                          child: Icon(Icons.music_note),
-                        ),
-                      ),
-                    );
-                  },
-                  future: () => OnAudioQuery().queryArtwork(
-                        int.parse(song.id),
-                        ArtworkType.AUDIO,
-                        quality: 10,
-                        size: 52,
-                      )),
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  song.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  song.artist ?? "No Artist",
-                  maxLines: 1,
-                  style: TextStyle(color: TWColors.neutral.shade500),
-                  overflow: TextOverflow.ellipsis,
-                )
-              ],
-            ))
-          ],
-        ),
       ),
     );
   }

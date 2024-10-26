@@ -37,12 +37,16 @@ class _AlbumTileState extends State<AlbumTile> {
                       return const Icon(Icons.music_note);
                     }
                     // returnText(resp.data.toString());
-                    return CachedMemoryImage(
-                      filterQuality: FilterQuality.low,
-                      uniqueKey: widget.album.id.toString(),
-                      bytes: resp.data,
-                      errorWidget: const Center(
-                        child: Icon(Icons.music_note),
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedMemoryImage(
+                        
+                        filterQuality: FilterQuality.low,
+                        uniqueKey: widget.album.id.toString(),
+                        bytes: resp.data,
+                        errorWidget: const Center(
+                          child: Icon(Icons.music_note),
+                        ),
                       ),
                     );
                   },

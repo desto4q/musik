@@ -49,10 +49,18 @@ class _LyricScreenState extends State<LyricScreen> {
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
                     }
+                    _activeIndexNotifier.value = -1;
+                    _listController.animateToItem(
+                        index: 0,
+                        scrollController: _scrollController,
+                        alignment: 0,
+                        duration: (t)=>Duration(milliseconds: 300),
+                        curve: (t)=>Curves.easeIn);
                     final playerState = snapshot.data;
                     final metadata =
                         playerState?.currentSource!.tag as MediaItem;
-
+                    queryCache
+                        .invalidateQueries(metadata.extras?["path"] ?? "empty");
                     return Query([metadata.extras?["path"] ?? "empty"],
                         builder: (builder, resp) {
                           if (resp.data == null || resp.data!.isEmpty) {
