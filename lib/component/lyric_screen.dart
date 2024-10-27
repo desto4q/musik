@@ -50,12 +50,14 @@ class _LyricScreenState extends State<LyricScreen> {
                       return const Center(child: CircularProgressIndicator());
                     }
                     _activeIndexNotifier.value = -1;
-                    _listController.animateToItem(
-                        index: 0,
-                        scrollController: _scrollController,
-                        alignment: 0,
-                        duration: (t) => Duration(milliseconds: 300),
-                        curve: (t) => Curves.easeIn);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _listController.animateToItem(
+                          index: 0,
+                          scrollController: _scrollController,
+                          alignment: 0.5,
+                          duration: (t) => const Duration(milliseconds: 500),
+                          curve: (t) => Curves.easeIn);
+                    });
                     final playerState = snapshot.data;
                     final metadata =
                         playerState?.currentSource!.tag as MediaItem;
